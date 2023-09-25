@@ -1,0 +1,162 @@
+---
+title: "QMM ASSIGNMENT 2"
+author: "Goli Sai Priyanka"
+date: "2023-09-24"
+output:
+  pdf_document: default
+  html_document: default
+---
+The Weigelt Corporation has three branch plants with excess production capacity. Fortunately,
+the corporation has a new product ready to begin production, and all three plants have this
+capability, so some of the excess capacity can be used in this way. This product can be made in
+three sizes--large, medium, and small--that yield a net unit profit of $420, $360, and $300,
+respectively. Plants 1, 2, and 3 have the excess capacity to produce 750, 900, and 450 units per
+day of this product, respectively, regardless of the size or combination of sizes involved.
+The amount of available in-process storage space also imposes a limitation on the production
+rates of the new product. Plants 1, 2, and 3 have 13,000, 12,000, and 5,000 square feet,
+respectively, of in-process storage space available for a day's production of this product. Each
+unit of the large, medium, and small sizes produced per day requires 20, 15, and 12 square feet,
+respectively.
+Sales forecasts indicate that if available, 900, 1,200, and 750 units of the large, medium, and
+small sizes, respectively, would be sold per day.
+At each plant, some employees will need to be laid off unless most of the plant’s excess
+production capacity can be used to produce the new product. To avoid layoffs if possible,
+management has decided that the plants should use the same percentage of their excess capacity
+to produce the new product.
+Management wishes to know how much of each of the sizes should be produced by each of the
+plants to maximize profit.
+Solve the problem using lpsolve, or any other equivalent library in R.
+Requirements
+All due dates are included in the Assignment Schedule.
+
+#solution : 
+The objective function is Max Z = 420(K1 + S2 + U3) + 360(K1 + S2 + U3) + 300(K1 + S2 + U3)
+Rearraning the objective function Max Z = 420K1+360S1+300U1+420K2+360S2+300U2+420K3+360S3+300U3
+subject to Constrains
+
+$$K1 + S1 + U1 \le 750$$
+$$K2 + S2 + U2 \le 900$$
+$$K3 + S3 + U3 \le 450$$
+
+
+$$20K1 + 15S1 + 12U1 \le 13000$$
+
+$$20K2 + 15S2 + 12U2 \le 12000$$
+$$20K3 + 15S3 + 12U3 \le 5000$$
+$$K1 + K2 + K3\le 900$$
+$$S1 + S2 + S3 \le 1200$$
+$$U1 + U2 + U3 \le 750$$
+Non negativity constraints
+$$K1, K2, K3, S1, S2, S3, U1, U2, U3 \ge 0$$
+
+$$900K1 + 900S1 + 900U1 − 750K2 − 750S2 − 750U2 + 0K3 + 0S3 + 0U3 = 0$$
+$$0K1 + 0S1 + 0U1 + 450K2 + 450S2 + 450U2 − 900K3 − 900S3 − 900U3 = 0$$
+$$450K1 + 450S1 + 450U1 + 0K2 + 0S2 + 0U2 − 750K3 − 750S3 − 750U3 = 0$$
+##SOLUTION :
+Now, let’s solve this problem using R.
+
+To solve the this problem we need to use the library “lpsolve
+```{r}
+library(lpSolve)
+z <- c(420,360,300,420,360,300,420,360,300)
+constrains <- matrix(c(1,1,1,0,0,0,0,0,0,
+0,0,0,1,1,1,0,0,0,
+0,0,0,0,0,0,1,1,1,
+20,15,12,0,0,0,0,0,0,
+0,0,0,20,15,12,0,0,0,
+0,0,0,0,0,0,20,15,12,
+1,0,0,1,0,0,1,0,0,
+0,1,0,0,1,0,0,1,0,
+0,0,1,0,0,1,0,0,1,
+900,900,900,-750,-750,-750,0,0,0,
+0,0,0,450,450,450,-900,-900,-900,
+450,450,450,0,0,0,-750,-750,-750),nrow = 12,byrow = TRUE)
+
+constrains
+
+
+directions <- c("<=",
+"<=",
+"<=",
+"<=",
+"<=",
+"<=",
+"<=",
+"<=",
+"<=",
+"=",
+"=",
+"=")
+
+
+
+RHS <- c(750,
+900,
+450,
+13000,
+12000,
+5000,
+900,
+1200,
+750,
+0,
+0,
+0)
+
+
+maximum <- lp("max",z,constrains,directions,RHS)
+maximum
+
+```
+
+
+```{r}
+maximum$solution
+
+```
+
+
+```{r}
+maximum$solution[1]
+```
+
+
+
+```{r}
+maximum$solution[2]
+```
+
+
+```{r}
+maximum$solution[3]
+```
+
+
+```{r}
+maximum$solution[4]
+```
+
+
+```{r}
+maximum$solution[5]
+```
+
+
+```{r}
+maximum$solution[6]
+```
+
+
+```{r}
+maximum$solution[7]
+```
+
+
+```{r}
+maximum$solution[8]
+```
+
+
+```{r}
+maximum$solution[9]
+```
